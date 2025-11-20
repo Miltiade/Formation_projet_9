@@ -1,0 +1,7 @@
+<h1>Bienvenue sur LITRevu</h1>
+<p>Page d’accueil</p>
+
+<form method="post" action="{% url 'users:logout' %}">
+  {% csrf_token %}
+  <button type="submit">Se déconnecter</button>
+</form>
