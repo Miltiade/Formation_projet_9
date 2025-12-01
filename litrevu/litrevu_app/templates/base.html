@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}LITRevu{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>LITRevu</h1>
+        <nav>
+            <a href="{% url 'litrevu:flux' %}">Flux</a> |
+            <a href="{% url 'litrevu:billet_ajouter' %}">Ajouter un billet</a>
+            <!-- Ajoutez d’autres liens utiles ici -->
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        <!-- Contenu spécifique aux pages -->
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 LITRevu</p>
+    </footer>
+</body>
+</html>
