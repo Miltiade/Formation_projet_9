@@ -1,3 +1,5 @@
+print("Modèles chargés dans litrevu_app/models.py")
+
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -27,7 +29,7 @@ class Billet(models.Model):
 
 class Commentaire(models.Model):
     # Billet auquel ce commentaire est associé
-    billet = models.ForeignKey(to='litrevu.Billet', on_delete=models.CASCADE, related_name='commentaires')
+    billet = models.ForeignKey(to='litrevu_app.Billet', on_delete=models.CASCADE, related_name='commentaires')
 
     # Note attribuée au billet (par exemple, un entier)
     rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
