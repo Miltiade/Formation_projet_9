@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-print("Chargement de settings.py depuis :", __file__)
-
 from pathlib import Path
 import os
 
@@ -41,10 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'litrevu_app',
+    'litrevu',
 ]
-
-print("Apps installées :", INSTALLED_APPS)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -61,7 +57,7 @@ ROOT_URLCONF = 'litrevu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'litrevu_app', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'litrevu', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
