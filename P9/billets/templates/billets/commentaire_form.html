@@ -1,0 +1,22 @@
+{% extends "billets/base_generic.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} un commentaire
+{% endblock %}
+
+{% block content %}
+<h2>
+    {% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} un commentaire
+</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">
+        {% if form.instance.pk %}Mettre à jour{% else %}Envoyer{% endif %}
+    </button>
+</form>
+
+<a href="{% url 'billets:flux' %}">Retour au flux</a>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "billets/base_generic.html" %}
+
+{% block title %}{{ view.object.title|default:"Nouveau billet" }}{% endblock %}
+
+{% block content %}
+  <h1>
+    {% if view.object %}
+      Modifier le billet : {{ view.object.title }}
+    {% else %}
+      Ajouter un nouveau billet
+    {% endif %}
+  </h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enregistrer</button>
+  </form>
+
+  <a href="{% url 'billets:flux' %}">Retour au flux</a>
+{% endblock %}

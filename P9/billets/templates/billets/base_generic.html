@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}LITRevu{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Bienvenue sur LITRevu</h1>
+        <nav>
+            <!-- Ajoutez ici vos liens de navigation -->
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Le contenu spécifique à chaque page sera ici -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 LITRevu</p>
+    </footer>
+</body>
+</html>
