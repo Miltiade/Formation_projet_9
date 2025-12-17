@@ -1,9 +1,15 @@
+"""
+Models for Billet and Commentaire.
+"""
+
+
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Billet(models.Model):
+    """Model representing a post (Billet)."""
     # Titre du billet, champ texte limité à 128 caractères
     title = models.CharField(max_length=128)
 
@@ -33,6 +39,7 @@ class Billet(models.Model):
 
 
 class Commentaire(models.Model):
+    """Model representing a comment (Commentaire) on a Billet."""
     # Billet auquel ce commentaire est associé
     billet = models.ForeignKey(
         to="Billet", on_delete=models.CASCADE, related_name="commentaires"

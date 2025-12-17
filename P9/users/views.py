@@ -1,3 +1,7 @@
+"""
+Vues pour les modèles CustomUser et UserFollows.
+"""
+
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -13,6 +17,7 @@ from django.views.generic import DeleteView
 
 
 class SignUpView(generic.CreateView):
+    """View for user signup."""
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("users:login")
     template_name = "users/signup.html"
@@ -23,6 +28,7 @@ def home(request):
 
 
 class UserFollowsListView(LoginRequiredMixin, ListView):
+    """View to list users followed by the current user."""
     model = UserFollows
     template_name = "users/userfollows_list.html"
     context_object_name = "follows"
@@ -32,10 +38,12 @@ class UserFollowsListView(LoginRequiredMixin, ListView):
 
 
 User = get_user_model()
+"""View to add a new user to follow."""
 
 
 @login_required
 def userfollows_ajouter(request):
+    """View to add a new user to follow."""
     if request.method == "POST":
         form = UserFollowsForm(request.POST)
         if form.is_valid():
@@ -75,10 +83,11 @@ def userfollows_ajouter(request):
 
 
 class UserFollowsDeleteView(LoginRequiredMixin, DeleteView):
+    """View to unfollow a user."""
     model = UserFollows
     template_name = "users/userfollows_confirm_delete.html"
     success_url = reverse_lazy("users:userfollows_liste")
 
     def get_queryset(self):
-        # L’utilisateur connecté ne peut supprimer que ses propres suivis
+        """Ensures that logged-in user can only delete their own follows."""
         return UserFollows.objects.filter(user=self.request.user)

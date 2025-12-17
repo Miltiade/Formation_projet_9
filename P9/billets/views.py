@@ -1,3 +1,7 @@
+"""
+Views for Billet and Commentaire models.
+"""
+
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -10,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 
 
 class BilletCreateView(LoginRequiredMixin, CreateView):
+    """View for creating a new Billet."""
     model = Billet
     form_class = BilletForm
     template_name = "billets/billet_form.html"  # créez ce template
@@ -25,6 +30,7 @@ class BilletCreateView(LoginRequiredMixin, CreateView):
 
 
 class BilletUpdateView(LoginRequiredMixin, UpdateView):
+    """View for updating an existing Billet."""
     model = Billet
     form_class = BilletForm
     template_name = "billets/billet_form.html"
@@ -37,6 +43,7 @@ class BilletUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class BilletDeleteView(LoginRequiredMixin, DeleteView):
+    """View for deleting a Billet."""
     model = Billet
     template_name = "billets/billet_confirm_delete.html"  # créez ce template
     success_url = reverse_lazy("billets:flux")
@@ -56,6 +63,7 @@ def flux(request):
 
 
 class CommentaireCreateView(LoginRequiredMixin, CreateView):
+    """View for creating a new Commentaire associated with a Billet."""
     model = Commentaire
     form_class = CommentaireForm
     template_name = "billets/commentaire_form.html"
@@ -79,6 +87,7 @@ class CommentaireCreateView(LoginRequiredMixin, CreateView):
 
 
 class CommentaireUpdateView(LoginRequiredMixin, UpdateView):
+    """View for updating an existing Commentaire."""
     model = Commentaire
     form_class = CommentaireForm
     template_name = "billets/commentaire_form.html"
@@ -92,6 +101,7 @@ class CommentaireUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class CommentaireDeleteView(LoginRequiredMixin, DeleteView):
+    """View for deleting a Commentaire."""
     model = Commentaire
     template_name = "billets/commentaire_confirm_delete.html"  # à créer
     success_url = reverse_lazy("billets:flux")
@@ -103,6 +113,7 @@ class CommentaireDeleteView(LoginRequiredMixin, DeleteView):
 
 @login_required
 def flux_view(request):
+    """Function-based view to display a combined feed of Billets and Commentaires"""
     # Étape 1 : récupérer les IDs des utilisateurs suivis
     suivis = UserFollows.objects.filter(user=request.user).values_list(
         "followed_user", flat=True
@@ -119,10 +130,6 @@ def flux_view(request):
     # Étape 4 : fusionner et trier par date de création descendante
     flux = list(billets) + list(commentaires)
     flux_tries = sorted(flux, key=lambda x: x.time_created, reverse=True)
-
-    print("Utilisateurs suivis :", list(suivis))
-    print("Billets récupérés :", list(billets))
-    print("Commentaires récupérés :", list(commentaires))
 
     # Étape 5 : passer la liste au template pour affichage
     return render(request, "billets/flux.html", {"flux": flux_tries})
