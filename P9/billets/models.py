@@ -23,6 +23,10 @@ class Billet(models.Model):
     # Méthode pour afficher le titre dans l’administration ou les listes
     def __str__(self):
         return self.title
+    
+    @property
+    def is_billet(self):
+        return True
 
 
 class Commentaire(models.Model):
@@ -46,3 +50,7 @@ class Commentaire(models.Model):
 
     def __str__(self):
         return f'{self.headline} ({self.rating}/5)'
+    
+    @property
+    def is_billet(self):
+        return False

@@ -4,7 +4,7 @@ from . import views
 app_name = 'billets'
 
 urlpatterns = [
-    path('', views.flux, name='flux'),
+    path('', views.flux_view, name='flux'),
     path('ajouter/', views.BilletCreateView.as_view(), name='ajouter'),
     path('modifier/<int:pk>/', views.BilletUpdateView.as_view(), name='modifier'),
     path('supprimer/<int:pk>/', views.BilletDeleteView.as_view(), name='supprimer'),

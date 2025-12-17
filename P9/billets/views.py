@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 from .models import Billet, Commentaire
+from users.models import UserFollows
 from django.shortcuts import get_object_or_404
 from .forms import BilletForm, CommentaireForm
 from django.contrib.auth.decorators import login_required
@@ -77,3 +78,28 @@ class CommentaireDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         # Autoriser uniquement l’auteur du commentaire à le supprimer
         return Commentaire.objects.filter(user=self.request.user)
+
+@login_required
+def flux_view(request):
+    # Étape 1 : récupérer les IDs des utilisateurs suivis
+    suivis = UserFollows.objects.filter(user=request.user).values_list('followed_user', flat=True)
+
+    # Étape 2 : récupérer billets de l'utilisateur courant + users suivis
+    billets = Billet.objects.filter(user__in=list(suivis) + [request.user.id])
+
+    # Étape 3 : récupérer commentaires de l'utilisateur courant + users suivis, liés aux billets récupérés
+    commentaires = Commentaire.objects.filter(
+        user__in=list(suivis) + [request.user.id],
+        billet__in=billets
+    )
+
+    # Étape 4 : fusionner et trier par date de création descendante
+    flux = list(billets) + list(commentaires)
+    flux_tries = sorted(flux, key=lambda x: x.time_created, reverse=True)
+
+    print("Utilisateurs suivis :", list(suivis))
+    print("Billets récupérés :", list(billets))
+    print("Commentaires récupérés :", list(commentaires))
+
+    # Étape 5 : passer la liste au template pour affichage
+    return render(request, 'billets/flux.html', {'flux': flux_tries})

@@ -4,30 +4,37 @@
 
 {% block content %}
 <h2>Flux</h2>
+
 <ul>
-    {% for billet in billets %}
-        <li>
-            {{ billet.title }} - {{ billet.user.username }}
-            {% if billet.user == request.user %}
-                <a href="{% url 'billets:modifier' billet.pk %}">Modifier</a>
-                <a href="{% url 'billets:supprimer' billet.pk %}">Supprimer</a>
-            {% endif %}
-            <ul>
-                {% for commentaire in billet.commentaires.all %}
-                    <li>
-                        {{ commentaire.headline }} - {{ commentaire.user.username }}
-                        {% if commentaire.user == request.user %}
-                            <a href="{% url 'billets:commentaire_modifier' commentaire.pk %}">Modifier</a>
-                            <a href="{% url 'billets:commentaire_supprimer' commentaire.pk %}">Supprimer</a>
-                        {% endif %}
-                    </li>
-                {% empty %}
-                    <li>Aucun commentaire.</li>
-                {% endfor %}
-            </ul>
-        </li>
-    {% empty %}
-        <li>Aucun billet disponible.</li>
-    {% endfor %}
+  <!-- {# Boucle sur tous les éléments du flux trié (billets et commentaires) #} -->
+  {% for item in flux %}
+    <li>
+      <!-- {# Vérifie si l’élément est un billet #} -->
+      {% if item.is_billet %}
+        <!-- Affiche le titre et l’auteur du billet -->
+        Billet : {{ item.title }} - {{ item.user.username }}
+        <!-- {# Affiche les liens de modification/suppression si c’est l’utilisateur courant #} -->
+        {% if item.user == request.user %}
+          <a href="{% url 'billets:modifier' item.pk %}">Modifier</a>
+          <a href="{% url 'billets:supprimer' item.pk %}">Supprimer</a>
+        {% endif %}
+      <!-- Sinon, c’est un commentaire -->
+      {% else %}
+        <!-- Affiche le titre du commentaire, son auteur et le billet associé -->
+        Commentaire : {{ item.headline }} - {{ item.user.username }} sur "{{ item.billet.title }}"
+        <!-- Liens modification/suppression pour l’auteur du commentaire -->
+        {% if item.user == request.user %}
+          <a href="{% url 'billets:commentaire_modifier' item.pk %}">Modifier</a>
+          <a href="{% url 'billets:commentaire_supprimer' item.pk %}">Supprimer</a>
+        {% endif %}
+      {% endif %}
+      <br>
+      <!-- Affiche la date de création formatée -->
+      Publié le {{ item.time_created|date:"d/m/Y H:i" }}
+    </li>
+  {% empty %}
+    <li>Aucune activité disponible.</li>
+  {% endfor %}
 </ul>
+
 {% endblock %}
