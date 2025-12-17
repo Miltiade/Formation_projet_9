@@ -13,3 +13,4 @@ pycodestyle==2.14.0
 pyflakes==3.4.0
 pytokens==0.3.0
 sqlparse==0.5.3
+python-dotenv==1.2.1
