@@ -7,13 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('litrevu', '0003_alter_commentaire_rating'),
+        ("litrevu", "0003_alter_commentaire_rating"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='commentaire',
-            name='rating',
-            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(5)]),
+            model_name="commentaire",
+            name="rating",
+            field=models.PositiveSmallIntegerField(
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(5),
+                ]
+            ),
         ),
     ]

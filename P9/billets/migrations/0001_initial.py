@@ -16,26 +16,74 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Billet',
+            name="Billet",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=128)),
-                ('description', models.TextField(blank=True, max_length=2048)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='images/')),
-                ('time_created', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=128)),
+                ("description", models.TextField(blank=True, max_length=2048)),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="images/"
+                    ),
+                ),
+                ("time_created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Commentaire',
+            name="Commentaire",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rating', models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(5)])),
-                ('headline', models.CharField(max_length=128)),
-                ('body', models.TextField(blank=True, max_length=8192)),
-                ('time_created', models.DateTimeField(auto_now_add=True)),
-                ('billet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='commentaires', to='billets.billet')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "rating",
+                    models.PositiveSmallIntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(0),
+                            django.core.validators.MaxValueValidator(5),
+                        ]
+                    ),
+                ),
+                ("headline", models.CharField(max_length=128)),
+                ("body", models.TextField(blank=True, max_length=8192)),
+                ("time_created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "billet",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="commentaires",
+                        to="billets.billet",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
