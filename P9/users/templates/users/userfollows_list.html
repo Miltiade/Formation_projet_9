@@ -1,0 +1,31 @@
+{% extends "users/base.html" %}
+
+{% block title %}Utilisateurs suivis{% endblock %}
+
+{% block content %}
+  <h2>Utilisateurs que vous suivez</h2>
+
+  <ul>
+    {% for follow in follows %}
+      <li>{{ follow.followed_user.username }}</li>
+       <a href="{% url 'users:userfollows_supprimer' follow.pk %}">Supprimer</a>
+    {% empty %}
+      <li>Vous ne suivez aucun utilisateur.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'users:userfollows_ajouter' %}">Ajouter un utilisateur à suivre</a>
+{% endblock %}
+
+{% block content %}
+  <h2>Utilisateurs qui vous suivent</h2>
+
+  <ul>
+    {% for follow in follows %}
+      <li>{{ follow.followed_user.username }}</li>
+    {% empty %}
+      <li>Aucun utilisateur ne vous suit.</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

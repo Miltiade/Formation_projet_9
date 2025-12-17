@@ -1,9 +1,9 @@
 {% extends "billets/base_generic.html" %}
 
-{% block title %}Suppression du billet{% endblock %}
+{% block title %}Suppression du commentaire{% endblock %}
 
 {% block content %}
-  <h2>Confirmez la suppression du billet : "{{ object.headline }}"</h2>
+  <h2>Confirmez la suppression du commentaire : "{{ object.headline }}"</h2>
 
   <form method="post">
     {% csrf_token %}

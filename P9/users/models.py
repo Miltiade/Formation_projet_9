@@ -5,7 +5,7 @@ from django.conf import settings
 
 class CustomUser(AbstractUser):
     
-    pass  # Ajoutez ici des champs personnalisés plus tard
+    pass
 
 
 class UserFollows(models.Model):
