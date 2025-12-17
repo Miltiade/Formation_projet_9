@@ -12,8 +12,8 @@ LITRevu est une application web développée avec Django permettant aux utilisat
 
 1. Clonez ce repository :  
    ```bash
-   git clone https://github.com/votre-utilisateur/votre-repo.git
-   cd votre-repo
+   git clone https://github.com/Miltiade/REPO_PROJET9.git
+   cd repo_projet9
    ```
 
 2. Créez un environnement virtuel et activez-le :
