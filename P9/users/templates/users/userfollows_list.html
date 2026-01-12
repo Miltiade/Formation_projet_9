@@ -15,14 +15,13 @@
   </ul>
 
   <a href="{% url 'users:userfollows_ajouter' %}">Ajouter un utilisateur à suivre</a>
-{% endblock %}
 
-{% block content %}
+
   <h2>Utilisateurs qui vous suivent</h2>
 
   <ul>
-    {% for follow in follows %}
-      <li>{{ follow.followed_user.username }}</li>
+    {% for follow in followers %}
+      <li>{{ follow.user.username }}</li>
     {% empty %}
       <li>Aucun utilisateur ne vous suit.</li>
     {% endfor %}

@@ -34,8 +34,14 @@ class UserFollowsListView(LoginRequiredMixin, ListView):
     context_object_name = "follows"
 
     def get_queryset(self):
+        """Returns the list of users followed by the logged-in user."""
         return UserFollows.objects.filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        """Adds the list of followers to the context."""
+        context['followers'] = UserFollows.objects.filter(followed_user=self.request.user)
+        return context
 
 User = get_user_model()
 """View to add a new user to follow."""
