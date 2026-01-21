@@ -1,6 +1,99 @@
-<h1>Connexion</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Se connecter</button>
-</form>
+{% extends "users/base.html" %}
+
+{% block title %}Connexion - LITRevu{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Conteneur principal alignant les deux blocs horizontalement */
+  .login-container {
+    display: flex;                /* Flexbox pour alignement horizontal */
+    gap: 2em;                    /* Espace entre les blocs */
+    justify-content: center;     /* Centré horizontalement */
+    align-items: center;         /* Centré verticalement */
+    max-width: 700px;            /* Largeur max fixe */
+    margin: 0 auto;              /* Centrage horizontal */
+  }
+
+  /* Styles communs aux blocs inscription et connexion */
+  .signup-block, .signin-block {
+    flex: 1;                    /* Largeur flexible égale */
+    display: flex;              /* Flex container */
+    flex-direction: column;     /* Colonne verticale */
+    justify-content: center;    /* Centrage vertical du contenu */
+  }
+
+  /* Titres des blocs en gras, un peu plus gros */
+  .signup-block p, .signin-block p {
+    margin-bottom: 1em;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  /* Boutons stylés */
+  .signup-block button, .signin-block button {
+    align-self: flex-start;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    border: 1px solid black;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* Effet au survol des boutons */
+  .signup-block button:hover, .signin-block button:hover {
+    background-color: #eee;
+  }
+
+  /* Styles inputs dans bloc connexion */
+  .signin-block input[type="text"],
+  .signin-block input[type="password"] {
+    padding: 0.4em;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1em;
+  }
+</style>
+{% endblock %}
+
+{% block header_buttons %}
+<!-- Cacher les boutons dans le header sur la page login -->
+{% endblock %}
+
+{% block content %}
+<!-- Conteneur principal pour aligner horizontalement inscription et connexion -->
+<div class="login-container">
+  
+  <!-- Bloc d'inscription à gauche -->
+  <section class="signup-block">
+    <p>Inscrivez-vous maintenant</p>
+    <!-- Lien vers la page d'inscription enveloppant un bouton -->
+    <a href="{% url 'users:signup' %}">
+      <button type="button">S'inscrire</button>
+    </a>
+  </section>
+
+  <!-- Bloc de connexion à droite -->
+  <section class="signin-block">
+    <p>Connectez-vous</p>
+    <!-- Formulaire de connexion -->
+    <form method="post" action="{% url 'users:login' %}">
+      {% csrf_token %}
+      <!-- Champ nom d'utilisateur avec label -->
+      {{ form.username.label_tag }}<br>
+      {{ form.username }}<br><br>
+
+      <!-- Champ mot de passe avec label -->
+      {{ form.password.label_tag }}<br>
+      {{ form.password }}<br><br>
+
+      <!-- Bouton de soumission -->
+      <button type="submit">Se connecter</button>
+    </form>
+  </section>
+
+</div>
+{% endblock %}

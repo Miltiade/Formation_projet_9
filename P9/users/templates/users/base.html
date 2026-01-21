@@ -3,13 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}LITRevu{% endblock %}</title>
+    <style>
+      /* Reset */
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        background-color: #fff;        
+      }
+
+      header {
+        height: 10vh; /* 1/10e hauteur viewport */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #000;
+      }
+
+      header .title {
+        text-align: center;
+        font-weight: normal;
+        font-size: 14px;
+      }
+
+      main {
+        flex: 1; /* prendre tout l’espace disponible */
+        display: flex;
+        justify-content: center; /* centrer horizontalement */
+        align-items: center;     /* centrer verticalement */
+        padding: 1em;
+        flex-direction: column;  /* pour que le contenu s’empile verticalement */
+      }
+
+      /* Styles généraux pour les paragraphes, liens et boutons */
+      p {
+        margin: 1em 0;
+      }
+
+      a {
+        color: black;
+        text-decoration: none;
+      }
+
+      a:hover, a:focus {
+        text-decoration: underline;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 0.5em 1em;
+        border: 1px solid black;
+        background: none;
+        cursor: pointer;
+        border-radius: 4px;
+      }      
+    </style>
+    {% block extra_css %}
+    <!-- Styles spécifiques aux pages insérés ici -->
+    {% endblock %}
 </head>
 <body>
     <header>
-        <h1>Bienvenue sur LITRevu</h1>
-        <nav>
-            <!-- Ajoutez ici vos liens de navigation -->
-        </nav>
+        <div class="title">LITReview</div>
+        <div class="nav-buttons">
+            {% block header_buttons %}
+            <!-- Boutons visibles seulement sur certaines pages -->
+            {% endblock %}
+        </div>
     </header>
 
     <main>

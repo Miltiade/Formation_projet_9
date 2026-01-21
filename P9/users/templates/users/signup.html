@@ -2,11 +2,117 @@
 
 {% block title %}Inscription - LITRevu{% endblock %}
 
+{% block header_buttons %}
+<!-- rien ici pour cacher les boutons -->
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    main {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* Conteneur principal avec colonne unique */
+  .signup-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 2em auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Titres */
+  .signup-container h2 {
+    margin-bottom: 1em;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+  }
+
+  /* Labels au dessus des champs */
+  form label {
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+    font-weight: bold;
+    display: block;
+  }
+
+  /* Champs input */
+  form input {
+    width: 100%;
+    padding: 0.5em;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  /* Groupe des deux boutons côte-à-côte */
+  .btn-group {
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: flex-end;    /* alignement à droite */
+    gap: 1em;                       /* espace horizontal entre boutons */
+  }
+
+  /* Bouton retourner stylisé comme un lien */
+  .btn-return {
+    padding: 0.5em 1em;
+    text-decoration: none;
+    background-color: transparent;
+    border: 1px solid #000;
+    border-radius: 4px;
+    color: black;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .btn-return:hover, .btn-return:focus {
+    background-color: #eee;
+  }
+
+  /* Bouton envoyer */
+  .btn-submit {
+    padding: 0.5em 1.5em;
+    border-radius: 4px;
+    border: 1px solid #000;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .btn-submit:hover, .btn-submit:focus {
+    background-color: #eee;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-  <h2>Inscription</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">S'inscrire</button>
-  </form>
+  <div class="signup-container">
+    <h2>Inscrivez-vous</h2>
+    <form method="post">
+      {% csrf_token %}
+
+      <!-- Champ Nom d'utilisateur -->
+      <label for="{{ form.username.id_for_label }}">Nom d'utilisateur</label>
+      {{ form.username }}
+
+      <!-- Champ Mot de passe -->
+      <label for="{{ form.password1.id_for_label }}">Mot de passe</label>
+      {{ form.password1 }}
+
+      <!-- Champ Confirmation mot de passe -->
+      <label for="{{ form.password2.id_for_label }}">Confirmer mot de passe</label>
+      {{ form.password2 }}
+
+      <!-- Bloc boutons côte-à-côte -->
+      <div class="btn-group">
+        <a href="{% url 'users:login' %}" class="btn-return">Retourner</a>
+        <button type="submit" class="btn-submit">S'inscrire</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
