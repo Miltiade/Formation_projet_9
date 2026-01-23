@@ -133,3 +133,7 @@ def flux_view(request):
 
     # Étape 5 : passer la liste au template pour affichage
     return render(request, "billets/flux.html", {"flux": flux_tries})
+
+@login_required
+def posts_perso_view(request):
+    return render(request, "billets/posts_perso.html")

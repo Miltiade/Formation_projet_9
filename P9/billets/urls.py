@@ -29,4 +29,5 @@ urlpatterns = [
         views.CommentaireDeleteView.as_view(),
         name="commentaire_supprimer",
     ),
+    path("posts/", views.posts_perso_view, name="posts_perso"),
 ]

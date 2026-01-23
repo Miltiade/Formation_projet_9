@@ -21,17 +21,28 @@
       }
 
       header {
-        height: 10vh; /* 1/10e hauteur viewport */
+        height: 10vh;
         display: flex;
-        justify-content: center;
         align-items: center;
+        padding: 0 1em;
         border-bottom: 1px solid #000;
+        justify-content: space-between;
+        position: relative;
       }
 
       header .title {
-        text-align: center;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
         font-weight: normal;
         font-size: 14px;
+        text-align: center;
+      }
+
+      .nav-buttons {
+        margin-left: auto;
+        display: flex;
+        gap: 1em;
       }
 
       main {
