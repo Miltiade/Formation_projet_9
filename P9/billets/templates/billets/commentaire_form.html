@@ -1,22 +1,148 @@
-{% extends "billets/base_generic.html" %}
+{% extends "users/base.html" %}
 
-{% block title %}
-    {% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} un commentaire
+{% block title %}Créer une critique - LITRevu{% endblock %}
+{% block header_buttons %}
+  {% include "users/header_buttons.html" %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+    .form-container {
+        margin: 0 auto;       /* centre horizontalement */
+        width: 80%;           /* largeur à 80 % */
+        max-width: 800px;     /* optionnel, max largeur */
+    }
+
+    .bloc {
+        /* margin-bottom: 2em; */
+        padding: 1em;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cadre-noir {
+        border: 1px solid black;
+    }
+
+    .label-bloc1,
+    .label-bloc2 {
+        margin-bottom: 0.5em;
+    }
+
+    /* Bloc 1 : infos billet */
+    .infos-billet {
+        border: 1px solid black;
+        margin: 0 auto;
+        width: 50%;
+    }
+
+    .align-droite {
+        text-align: right;
+    }
+
+    .image-billet {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid black;
+        margin-top: 0.5em;
+    }
+
+    /* Bloc 2 : note sur une ligne avec boutons radios */
+    .rating-radio-buttons {
+        display: flex;
+        gap: 1em;
+        margin: 0.5em 0 1em 0;
+        align-items: center;
+    }
+
+    .rating-radio-buttons label {
+        cursor: pointer;
+    }
+
+    /* Champs formulaire sur une ligne simple avec label au-dessus */
+    form label {
+        margin-top: 1em;
+        margin-bottom: 0.25em;
+        display: block;
+    }
+
+    /* Bouton envoyer aligné à droite */
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1.5em;
+    }
+
+    /* Styles des champs (input, textarea) */
+    input[type="text"],
+    textarea,
+    input[type="radio"] {
+        font-size: 1em;
+        width: 100%;
+        max-width: 500px;
+        box-sizing: border-box;
+    }
+
+    /* Pour textarea spécifiquement */
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<h2>
-    {% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} un commentaire
-</h2>
+<div class="form-container">
+<label>Créer une critique</label>
 
 <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+  {% csrf_token %}
+  {{ form.non_field_errors }}
 
-    <button type="submit">
-        {% if form.instance.pk %}Mettre à jour{% else %}Envoyer{% endif %}
-    </button>
+  <!-- Bloc 1 : Infos demande de critique -->
+  <div class="bloc cadre-noir">
+    <label class="label-bloc1">Vous êtes en train de poster en réponse à :</label>
+
+    <div class="infos-billet">
+      <p class="align-droite">{{ billet.time_created|date:"H:i, l d F Y" }}</p>
+      <p>{{ billet.user.username }} a demandé une critique</p>
+      <p>{{ billet.title }}</p>
+      <p>{{ billet.description }}</p>
+
+      {% if billet.image %}
+      <p><img src="{{ billet.image.url }}" alt="Image de {{ billet.title }}" class="image-billet"></p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Bloc 2 : Formulaire critique -->
+  <div class="bloc cadre-noir">
+    <label class="label-bloc2">Critique</label>
+
+    <label for="{{ form.headline.id_for_label }}">Titre</label>
+    {{ form.headline.errors }}
+    {{ form.headline }}
+
+    <label>Note</label>
+    <div class="rating-radio-buttons">
+      {% for i in "012345" %}
+        <label>
+          <input type="radio" name="{{ form.rating.name }}" value="{{ i }}" {% if form.rating.value == i %}checked{% endif %}>
+          {{ i }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <label for="{{ form.body.id_for_label }}">Commentaire</label>
+    {{ form.body.errors }}
+    {{ form.body }}
+
+    <div class="button-container">
+      <button type="submit">Envoyer</button>
+    </div>
+  </div>
 </form>
-
-<a href="{% url 'billets:flux' %}">Retour au flux</a>
+</div>
 {% endblock %}

@@ -79,6 +79,11 @@ class CommentaireCreateView(LoginRequiredMixin, CreateView):
         )  # associe l’utilisateur connecté
         form.instance.billet = self.billet  # associe le billet
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["billet"] = self.billet  # ajoute l’objet billet au contexte
+        return context
 
     def get_success_url(self):
         return reverse_lazy(
