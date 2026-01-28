@@ -30,4 +30,5 @@ urlpatterns = [
         name="commentaire_supprimer",
     ),
     path("posts/", views.posts_perso_view, name="posts_perso"),
+    path('ajouter-complet/', views.BilletCritiqueCreateView.as_view(), name='ajouter_complet'),
 ]

@@ -1,0 +1,175 @@
+{% extends "users/base.html" %}
+{% block title %}Créer billet et critique - LITRevu{% endblock %}
+{% block header_buttons %}
+  {% include "users/header_buttons.html" %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    
+    .form-container {
+        margin: 0 auto;       /* centre horizontalement */
+        width: 80%;           /* largeur à 80 % */
+        max-width: 800px;     /* optionnel, max largeur */
+    }
+
+    .page-title {
+        text-align: center;
+        margin: 1.5em 0;  /* marge verticale 1.5em, horizontale 0 */
+    }    
+
+    .bloc {
+        /* margin-bottom: 2em; */
+        padding: 1em;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cadre-noir {
+        border: 1px solid black;
+    }
+
+    .label-bloc1,
+    .label-bloc2 {
+        margin-bottom: 0.5em;
+    }
+
+    /* Bloc 1 : infos billet */
+    .infos-billet {
+        border: 1px solid black;
+        margin: 0 auto;
+        width: 50%;
+    }
+
+    .align-droite {
+        text-align: right;
+    }
+
+    .image-billet {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid black;
+        margin-top: 0.5em;
+    }
+
+    /* Bloc 2 : note sur une ligne avec boutons radios */
+    .rating-radio-buttons {
+        display: flex;
+        gap: 1em;
+        margin: 0.5em 0 1em 0;
+        align-items: center;
+    }
+
+    .rating-radio-buttons label {
+        cursor: pointer;
+    }
+
+    /* Champs formulaire sur une ligne simple avec label au-dessus */
+    form label {
+        margin-top: 1em;
+        margin-bottom: 0.25em;
+        display: block;
+    }
+
+    /* Bouton envoyer aligné à droite */
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1.5em;
+    }
+
+    /* Styles des champs (input, textarea) */
+    input[type="text"],
+    textarea,
+    input[type="radio"] {
+        font-size: 1em;
+        width: 100%;
+        max-width: 500px;
+        box-sizing: border-box;
+    }
+
+    /* Pour textarea spécifiquement */
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<label class="page-title">Créer une critique</label>
+<div class="form-container">
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <!-- Bloc Livre / Article -->
+    <div class="bloc">
+      <label class="label-bloc" for="{{ billet_form.title.id_for_label }}">Livre / Article</label>
+
+      <div class="form-field">
+        <label for="{{ billet_form.title.id_for_label }}">Titre</label>
+        <div>
+          {{ billet_form.title.errors }}
+          {{ billet_form.title }}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="{{ billet_form.description.id_for_label }}">Description</label>
+        <div>
+          {{ billet_form.description.errors }}
+          {{ billet_form.description }}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="{{ billet_form.image.id_for_label }}">Image</label>
+        <div>
+          {{ billet_form.image.errors }}
+          {{ billet_form.image }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloc Critique -->
+    <div class="bloc">
+      <label class="label-bloc" for="{{ commentaire_form.headline.id_for_label }}">Critique</label>
+
+      <div class="form-field">
+        <label for="{{ commentaire_form.headline.id_for_label }}">Titre</label>
+        <div>
+          {{ commentaire_form.headline.errors }}
+          {{ commentaire_form.headline }}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>Note</label>
+        <div class="rating-radio-buttons">
+          {% for i in "012345" %}
+            <label>
+              <input type="radio" name="{{ commentaire_form.rating.name }}" value="{{ i }}" 
+                {% if commentaire_form.rating.value == i %}checked{% endif %}>
+              {{ i }}
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="{{ commentaire_form.body.id_for_label }}">Commentaire</label>
+        <div>
+          {{ commentaire_form.body.errors }}
+          {{ commentaire_form.body }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton Envoyer -->
+    <div class="button-container">
+      <button type="submit">Envoyer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -5,10 +5,11 @@ Views for Billet and Commentaire models.
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView
 from .models import Billet, Commentaire
 from users.models import UserFollows
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from .forms import BilletForm, CommentaireForm
 from django.contrib.auth.decorators import login_required
 
@@ -53,6 +54,37 @@ class BilletDeleteView(LoginRequiredMixin, DeleteView):
             user=self.request.user
         )  # permet uniquement à l’auteur de supprimer
 
+class BilletCritiqueCreateView(LoginRequiredMixin, View):
+    template_name = "billets/billet_critique_form.html"
+
+    def get(self, request):
+        billet_form = BilletForm()
+        commentaire_form = CommentaireForm()
+        return render(request, self.template_name, {
+            "billet_form": billet_form,
+            "commentaire_form": commentaire_form,
+        })
+
+    def post(self, request):
+        billet_form = BilletForm(request.POST, request.FILES)
+        commentaire_form = CommentaireForm(request.POST)
+
+        if billet_form.is_valid() and commentaire_form.is_valid():
+            billet = billet_form.save(commit=False)
+            billet.user = request.user
+            billet.save()
+
+            commentaire = commentaire_form.save(commit=False)
+            commentaire.user = request.user
+            commentaire.billet = billet
+            commentaire.save()
+
+            return redirect("billets:flux")
+
+        return render(request, self.template_name, {
+            "billet_form": billet_form,
+            "commentaire_form": commentaire_form,
+        })
 
 @login_required
 def flux(request):
