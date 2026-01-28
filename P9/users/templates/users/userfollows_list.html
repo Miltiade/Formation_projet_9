@@ -1,30 +1,101 @@
 {% extends "users/base.html" %}
-
 {% block title %}Utilisateurs suivis{% endblock %}
 
+{% block header_buttons %}
+    {% include "users/header_buttons.html" %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .page-container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+  label.section-title {
+    margin: 1em 0;
+    display: block;
+    text-align: center;
+  }
+  .form-inline {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+  }
+  .form-inline input[type="text"] {
+    flex-grow: 1;
+    padding: 0.5em;
+    font-size: 1em;
+  }
+  .list-block {
+    border: 1px solid black;
+    padding: 0.5em;
+  }
+  .list-item {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid black;
+    padding: 0.5em 1em;
+    align-items: center;
+  }
+  .list-item:first-child {
+    border-top: none;
+  }
+  .list-item .username {
+    margin-left: 0;
+    text-align: left;
+    flex: 1;
+  }
+  .list-item button {
+    margin-left: 1em;
+  }
+  .followers-list .list-item {
+    justify-content: flex-start;
+  }
+  .followers-list .list-item button {
+    display: none;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-  <h2>Utilisateurs que vous suivez</h2>
+<div class="page-container">
 
-  <ul>
+  <!-- Bloc 1 : Suivre d'autres utilisateurs -->
+  <label class="section-title">Suivre d'autres utilisateurs</label>
+  <form class="form-inline" method="post" action="{% url 'users:userfollows_ajouter' %}">
+    {% csrf_token %}
+    {{ form.username }}
+    <button type="submit">Envoyer</button>
+  </form>
+
+  <!-- Bloc 2 : Abonnements -->
+  <label class="section-title">Abonnements</label>
+  <div class="list-block">
     {% for follow in follows %}
-      <li>{{ follow.followed_user.username }}</li>
-       <a href="{% url 'users:userfollows_supprimer' follow.pk %}">Supprimer</a>
+      <div class="list-item">
+        <span class="username">{{ follow.followed_user.username }}</span>
+        <form method="post" action="{% url 'users:userfollows_supprimer' follow.pk %}">
+          {% csrf_token %}
+          <button type="submit">Désabonner</button>
+        </form>
+      </div>
     {% empty %}
-      <li>Vous ne suivez aucun utilisateur.</li>
+      <div>Aucun abonnement.</div>
     {% endfor %}
-  </ul>
+  </div>
 
-  <a href="{% url 'users:userfollows_ajouter' %}">Ajouter un utilisateur à suivre</a>
-
-
-  <h2>Utilisateurs qui vous suivent</h2>
-
-  <ul>
-    {% for follow in followers %}
-      <li>{{ follow.user.username }}</li>
+  <!-- Bloc 3 : Abonnés -->
+  <label class="section-title">Abonnés</label>
+  <div class="list-block followers-list">
+    {% for follower in followers %}
+      <div class="list-item">{{ follower.user.username }}</div>
     {% empty %}
-      <li>Aucun utilisateur ne vous suit.</li>
+      <div>Aucun abonné.</div>
     {% endfor %}
-  </ul>
+  </div>
 
+</div>
 {% endblock %}

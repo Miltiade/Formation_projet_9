@@ -41,6 +41,8 @@ class UserFollowsListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         """Adds the list of followers to the context."""
         context['followers'] = UserFollows.objects.filter(followed_user=self.request.user)
+        """Adds the follow form to the context."""
+        context['form'] = UserFollowsForm()
         return context
 
 User = get_user_model()
