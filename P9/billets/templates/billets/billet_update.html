@@ -1,0 +1,112 @@
+{% extends "users/base.html" %}
+{% block title %}Modifier un billet - LITRevu{% endblock %}
+
+{% block header_buttons %}
+  {% include "users/header_buttons.html" %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  main {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;    
+  }
+
+  .form-container {
+    width: 80%;
+    margin: 2em auto;
+    /* display: flex; */
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-field {
+    width: 100%;
+    margin-bottom: 1.5em;
+  }
+
+  .form-field label {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  .form-block {
+    /* padding: 1em; */
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+  }
+
+  .form-block > *:not(button) {
+    flex-grow: 1;
+  }
+
+  .form-block button {
+    align-self: flex-end;
+    padding: 0.5em 1em;
+    border: 1px solid black;
+    background: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .form-block button:hover, .form-block button:focus {
+    background-color: #eee;
+  }
+
+  .button-container {
+  text-align: right;
+  margin-top: 1em;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  Modifier votre ticket
+</div>
+<div class="form-container">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-field">
+      <label for="{{ form.title.id_for_label }}">Titre</label>
+      <div class="form-block">
+        {{ form.title.errors }}
+        {{ form.title }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="{{ form.description.id_for_label }}">Description</label>
+      <div class="form-block">
+        {{ form.description.errors }}
+        {{ form.description }}
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="{{ form.image.id_for_label }}">Image</label>
+      <div class="form-block">
+        {{ form.image.errors }}
+
+        {% if object.image %}
+          <div style="margin-bottom: 0.5em;">
+            <img src="{{ object.image.url }}" alt="Image actuelle" style="max-width: 300px;" />
+          </div>
+        {% endif %}
+
+        {{ form.image }}
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

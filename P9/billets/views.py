@@ -34,7 +34,7 @@ class BilletUpdateView(LoginRequiredMixin, UpdateView):
     """View for updating an existing Billet."""
     model = Billet
     form_class = BilletForm
-    template_name = "billets/billet_form.html"
+    template_name = "billets/billet_update.html"
     success_url = reverse_lazy("billets:flux")
 
     def get_queryset(self):
