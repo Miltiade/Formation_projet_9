@@ -127,7 +127,7 @@ class CommentaireUpdateView(LoginRequiredMixin, UpdateView):
     """View for updating an existing Commentaire."""
     model = Commentaire
     form_class = CommentaireForm
-    template_name = "billets/commentaire_form.html"
+    template_name = "billets/commentaire_update.html"
 
     def get_queryset(self):
         # Seuls les auteurs peuvent modifier leurs commentaires
