@@ -164,11 +164,21 @@ def flux_view(request):
         user__in=list(suivis) + [request.user.id], billet__in=billets
     )
 
-    # Étape 4 : fusionner et trier par date de création descendante
+    # Etape 3 bis : récupérer IDs billets commentés par l’utilisateur courant
+    billets_commentes_par_utilisateur = Commentaire.objects.filter(
+        user=request.user,
+        billet__in=billets
+    ).values_list('billet_id', flat=True)
+
+    # Étape 4 : Annoter chaque billet avec un attribut pour savoir si l'utilisateur a commenté
+    for billet in billets:
+        billet.user_has_commented = billet.pk in billets_commentes_par_utilisateur
+
+    # Étape 5 : fusionner et trier par date de création descendante
     flux = list(billets) + list(commentaires)
     flux_tries = sorted(flux, key=lambda x: x.time_created, reverse=True)
 
-    # Étape 5 : passer la liste au template pour affichage
+    # Étape 6 : passer la liste au template pour affichage
     return render(request, "billets/flux.html", {"flux": flux_tries})
 
 @login_required

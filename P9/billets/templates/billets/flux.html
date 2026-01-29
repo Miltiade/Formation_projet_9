@@ -1,40 +1,200 @@
-{% extends "billets/base_generic.html" %}
+{% extends "users/base.html" %}
 
-{% block title %}Flux LITRevu{% endblock %}
+{% block title %}Flux{% endblock %}
+
+{% block header_buttons %}
+  {% include "users/header_buttons.html" %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Conteneur principal, centré, largeur à 50% */
+  .content-container {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Bloc 1 : boutons */
+  .button-block {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* centre horizontalement le groupe */
+    gap: 7rem; /* espace entre boutons */
+    margin: 1rem 0; /* marge verticale */
+  }
+
+  .button-block a {
+    color: black;
+    padding: 0.5rem 5rem;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid black;
+  }
+
+  /* Bloc 2 : flux */
+  .flux-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Chaque élément du flux */
+  .flux-item {
+    width: 100%;
+    border: 1px solid black;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+  }
+
+  /* Structure générale */
+  .billet, .critique {
+    border: 1px solid black;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Texte aligné */
+  .utilisateur-gauche, .titre-gauche, .description-gauche, .commentaire-gauche {
+    text-align: left;
+    margin: 0.25rem 0;
+  }
+
+  .date-droite, .bouton-droite {
+    text-align: right;
+    margin: 0.25rem 0;
+  }
+
+  /* Images alignées à gauche */
+  .image-gauche img, .critique-billet img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid black;
+    margin-top: 0.5rem;
+  }
+
+  /* Bloc critique-billet : encadré noir et marges */
+  .critique-billet {
+    border: 1px solid black;
+    margin: 1rem 0 0 1rem;
+    padding: 0.5rem;
+  }
+
+  /* Etoiles noires côte-à-côte, taille réduite */
+  .etoiles {
+    color: black;
+    font-size: 1.2em;
+    margin-left: 0.5rem;
+  }
+
+  /* Bouton 'Créer une critique' */
+  .bouton-droite a {
+    color: black;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+
+  .bouton-droite a:hover {
+    background-color: #e0e0e0;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<h2>Flux</h2>
+<div class="content-container">
 
-<ul>
-  <!-- {# Boucle sur tous les éléments du flux trié (billets et commentaires) #} -->
-  {% for item in flux %}
-    <li>
-      <!-- {# Vérifie si l’élément est un billet #} -->
-      {% if item.is_billet %}
-        <!-- Affiche le titre et l’auteur du billet -->
-        Billet : {{ item.title }} - {{ item.user.username }}
-        <!-- {# Affiche les liens de modification/suppression si c’est l’utilisateur courant #} -->
-        {% if item.user == request.user %}
-          <a href="{% url 'billets:modifier' item.pk %}">Modifier</a>
-          <a href="{% url 'billets:supprimer' item.pk %}">Supprimer</a>
-        {% endif %}
-      <!-- Sinon, c’est un commentaire -->
-      {% else %}
-        <!-- Affiche le titre du commentaire, son auteur et le billet associé -->
-        Commentaire : {{ item.headline }} - {{ item.user.username }} sur "{{ item.billet.title }}"
-        <!-- Liens modification/suppression pour l’auteur du commentaire -->
-        {% if item.user == request.user %}
-          <a href="{% url 'billets:commentaire_modifier' item.pk %}">Modifier</a>
-          <a href="{% url 'billets:commentaire_supprimer' item.pk %}">Supprimer</a>
-        {% endif %}
-      {% endif %}
-      <br>
-      <!-- Affiche la date de création formatée -->
-      Publié le {{ item.time_created|date:"d/m/Y H:i" }}
-    </li>
-  {% empty %}
-    <li>Aucune activité disponible.</li>
-  {% endfor %}
-</ul>
+  <!-- Bloc 1 : boutons -->
+  <div class="button-block">
+    <a href="{% url 'billets:ajouter' %}">Demander une critique</a>
+    <a href="{% url 'billets:ajouter_complet' %}">Créer une critique</a>
+  </div>
 
+  <!-- Bloc 2 : flux -->
+  <div class="flux-container">
+    {% if flux %}
+      {% for item in flux %}
+        {% if item.is_billet %}
+            <article class="billet">
+              <p class="utilisateur-gauche">{{ item.user.username }} a demandé une critique</p>
+              <p class="date-droite">{{ item.time_created|date:"H:i, l d F Y" }}</p>
+              <p class="titre-gauche">{{ item.title }}</p>
+              {% if item.description %}
+                <p class="description-gauche">{{ item.description }}</p>
+              {% endif %}
+
+            
+              {% if item.image %}
+                <p class="image-gauche">
+                  <img src="{{ item.image.url }}" alt="Image de {{ item.title }}">
+                </p>
+              {% endif %}
+
+              <!-- {% comment %}   -->
+              <!-- Ici: logique affichage conditionnel bouton "Créer une critique" si l'utilisateur n’a pas encore posté de critique dessus   -->
+              <!-- {% endcomment %} -->
+              {% if not item.user_has_commented %}
+                <p class="bouton-droite">
+                  <a href="{% url 'billets:commentaire_ajouter' billet_pk=item.pk %}">Créer une critique</a>
+                </p>
+              {% endif %}
+            </article>
+
+
+              <!-- {% if item.user == request.user %}
+                <p>
+                  <a href="{% url 'billets:modifier' item.pk %}">Modifier</a> |
+                  <a href="{% url 'billets:supprimer' item.pk %}">Supprimer</a>
+                </p>
+              {% endif %}
+            </article> -->
+
+
+          {% else %}
+            <article class="critique">
+              <div class="critique-texte">
+                <p class="utilisateur-gauche">{{ item.user.username }} a publié une critique</p>
+                <p class="date-droite">{{ item.time_created|date:"H:i, l d F Y" }}</p>
+                <p class="titre-gauche">
+                  {{ item.headline }}
+                  <span class="etoiles">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= item.rating %}
+                        ★
+                      {% else %}
+                        ☆
+                      {% endif %}
+                    {% endfor %}
+                  </span>
+                </p>
+                {% if item.body %}
+                  <p class="commentaire-gauche">{{ item.body }}</p>
+                {% endif %}
+              </div>
+
+              <div class="critique-billet">
+                <p>Ticket - {{ item.billet.user.username }}</p>
+                <p>{{ item.billet.title }}</p>
+                {% if item.billet.image %}
+                  <p><img src="{{ item.billet.image.url }}" alt="Image de {{ item.billet.title }}"></p>
+                {% endif %}
+              </div>
+            </article>
+          {% endif %}
+        {% endfor %}
+        {% else %}
+          <p>Aucun billet ni commentaire à afficher dans votre flux.</p>
+        {% endif %}
+      </div>
+
+</div>
 {% endblock %}
