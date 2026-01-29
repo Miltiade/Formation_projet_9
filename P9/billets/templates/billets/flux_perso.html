@@ -1,0 +1,180 @@
+{% extends "users/base.html" %}
+
+{% block title %}Vos posts{% endblock %}
+
+{% block header_buttons %}
+  {% include "users/header_buttons.html" %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Conteneur principal, centré, largeur à 50% */
+  .content-container {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Bloc : flux-container */
+  .flux-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Chaque élément du flux */
+  .flux-item {
+    width: 100%;
+    border: 1px solid black;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+  }
+
+  /* Structure générale */
+  .billet, .critique {
+    border: 1px solid black;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Texte aligné */
+  .utilisateur-gauche, .titre-gauche, .description-gauche, .commentaire-gauche {
+    text-align: left;
+    margin: 0.25rem 0;
+  }
+
+  .date-droite {
+    text-align: right;
+    margin: 0.25rem 0;
+  }
+
+  /* Images alignées à gauche */
+  .image-gauche img, .critique-billet img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid black;
+    margin-top: 0.5rem;
+  }
+
+  /* Bloc critique-billet : encadré noir et marges */
+  .critique-billet {
+    border: 1px solid black;
+    margin: 1rem 0 0 1rem;
+    padding: 0.5rem;
+  }
+
+  /* Etoiles noires côte-à-côte, taille réduite */
+  .etoiles {
+    color: black;
+    font-size: 1.2em;
+    margin-left: 0.5rem;
+  }
+
+  /* Conteneur boutons actions alignés à droite */
+  .actions-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .actions-container a.btn {
+    padding: 0.3rem 0.8rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    text-decoration: none;
+    color: black;
+    white-space: nowrap;
+  }
+
+  .actions-container a.btn:hover {
+    background-color: #e0e0e0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-container">
+  <label>Vos posts</label>
+
+  <div class="flux-container">
+    {% if flux %}
+      {% for item in flux %}
+        {% if item.is_billet %}
+            <article class="billet">
+              <p class="utilisateur-gauche">{{ item.user.username }} a demandé une critique</p>
+              <p class="date-droite">{{ item.time_created|date:"H:i, l d F Y" }}</p>
+              <p class="titre-gauche">{{ item.title }}</p>
+              {% if item.description %}
+                <p class="description-gauche">{{ item.description }}</p>
+              {% endif %}
+
+              {% if item.image %}
+                <p class="image-gauche">
+                  <img src="{{ item.image.url }}" alt="Image de {{ item.title }}">
+                </p>
+              {% endif %}
+
+              <div class="actions-container">
+                {% if not item.user_has_commented %}
+                  <a href="{% url 'billets:commentaire_ajouter' billet_pk=item.pk %}" class="btn">Créer une critique</a>
+                {% endif %}
+                {% if item.user == request.user %}
+                  <a href="{% url 'billets:modifier' item.pk %}" class="btn">Modifier</a>
+                  <a href="{% url 'billets:supprimer' item.pk %}" class="btn">Supprimer</a>
+                {% endif %}
+              </div>
+            </article>
+          {% else %}
+            <article class="critique">
+              <div class="critique-texte">
+                <p class="utilisateur-gauche">{{ item.user.username }} a publié une critique</p>
+                <p class="date-droite">{{ item.time_created|date:"H:i, l d F Y" }}</p>
+                <p class="titre-gauche">
+                  {{ item.headline }}
+                  <span class="etoiles">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= item.rating %}
+                        ★
+                      {% else %}
+                        ☆
+                      {% endif %}
+                    {% endfor %}
+                  </span>
+                </p>
+                {% if item.body %}
+                  <p class="commentaire-gauche">{{ item.body }}</p>
+                {% endif %}
+              </div>
+
+              <div class="critique-billet">
+                <p>Ticket - {{ item.billet.user.username }}</p>
+                <p>{{ item.billet.title }}</p>
+                {% if item.billet.image %}
+                  <p><img src="{{ item.billet.image.url }}" alt="Image de {{ item.billet.title }}"></p>
+                {% endif %}
+              </div>
+
+              <div class="actions-container">
+                {% if item.user == request.user %}
+                  <a href="{% url 'billets:commentaire_modifier' item.pk %}" class="btn">Modifier</a>
+                  <a href="{% url 'billets:commentaire_supprimer' item.pk %}" class="btn">Supprimer</a>
+                {% endif %}
+              </div>
+            </article>
+          {% endif %}
+      {% endfor %}
+    {% else %}
+      <p>Aucun billet ni commentaire à afficher dans votre flux.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

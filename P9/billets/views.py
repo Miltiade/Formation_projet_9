@@ -183,4 +183,16 @@ def flux_view(request):
 
 @login_required
 def posts_perso_view(request):
-    return render(request, "billets/posts_perso.html")
+    # Récupérer les billets de l’utilisateur courant, triés par date décroissante
+    billets = Billet.objects.filter(user=request.user).order_by("-time_created")
+
+    # Récupérer les commentaires de l’utilisateur courant, triés par date décroissante
+    commentaires = Commentaire.objects.filter(user=request.user).order_by("-time_created")
+
+    # Fusionner et trier tous les posts par date décroissante
+    # Important : billets et commentaires doivent avoir un attribut is_billet identifié
+    flux = list(billets) + list(commentaires)
+    flux_tries = sorted(flux, key=lambda x: x.time_created, reverse=True)
+
+    # Passer la liste au template
+    return render(request, "billets/flux_perso.html", {"flux": flux_tries})
