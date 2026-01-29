@@ -133,6 +133,11 @@ class CommentaireUpdateView(LoginRequiredMixin, UpdateView):
         # Seuls les auteurs peuvent modifier leurs commentaires
         return Commentaire.objects.filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['billet'] = self.object.billet
+        return context
+
     def get_success_url(self):
         return reverse_lazy("billets:flux")
 
