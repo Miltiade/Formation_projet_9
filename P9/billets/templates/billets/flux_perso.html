@@ -121,6 +121,8 @@
                 <p class="image-gauche">
                   <img src="{{ item.image.url }}" alt="Image de {{ item.title }}">
                 </p>
+              {% else %}
+                <p class="image-gauche"><span>Pas d'image</span></p>
               {% endif %}
 
               <div class="actions-container">
@@ -160,7 +162,9 @@
                 <p>{{ item.billet.title }}</p>
                 {% if item.billet.image %}
                   <p><img src="{{ item.billet.image.url }}" alt="Image de {{ item.billet.title }}"></p>
-                {% endif %}
+                {% else %}
+                  <p><span>Pas d'image</span></p>
+                  {% endif %}
               </div>
 
               <div class="actions-container">

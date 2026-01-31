@@ -118,9 +118,11 @@
       <p>{{ billet.title }}</p>
       <p>{{ billet.description }}</p>
 
-      {% if billet.image %}
+    {% if billet.image %}
       <p><img src="{{ billet.image.url }}" alt="Image de {{ billet.title }}" class="image-billet"></p>
-      {% endif %}
+    {% else %}
+      <p><span>Pas d'image</span></p>
+    {% endif %}
     </div>
   </div>
 

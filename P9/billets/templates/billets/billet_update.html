@@ -95,15 +95,19 @@
         {{ form.image.errors }}
 
         {% if object.image %}
-          <div style="margin-bottom: 0.5em;">
-            <img src="{{ object.image.url }}" alt="Image actuelle" style="max-width: 300px;" />
-          </div>
+        <div style="margin-bottom: 0.5em;">
+          <img src="{{ object.image.url }}" alt="Image actuelle" style="max-width: 300px;" />
+        </div>
+        {% else %}
+        <div style="margin-bottom: 0.5em;">
+          <span>Pas d'image</span>
+        </div>
         {% endif %}
 
         {{ form.image }}
       </div>
     </div>
-
+    
     <div class="button-container">
       <button type="submit">Enregistrer</button>
     </div>

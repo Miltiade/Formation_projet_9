@@ -114,6 +114,8 @@
 
       {% if billet.image %}
       <p><img src="{{ billet.image.url }}" alt="Image de {{ billet.title }}" class="image-billet"></p>
+      {% else %}
+        <p><span>Pas d'image</span></p>
       {% endif %}
     </div>
   </div>

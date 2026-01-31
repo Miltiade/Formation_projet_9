@@ -129,7 +129,6 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/users/login/"
 
 # Filepath for media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
-
+MEDIA_ROOT = BASE_DIR / 'media'
 # Media files URL
-MEDIA_URL = '/images/'
+MEDIA_URL = '/media/'

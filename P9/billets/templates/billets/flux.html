@@ -137,6 +137,8 @@
                 <p class="image-gauche">
                   <img src="{{ item.image.url }}" alt="Image de {{ item.title }}">
                 </p>
+              {% else %}
+                <p class="image-gauche"><span>Pas d'image</span></p>
               {% endif %}
 
               <!-- {% comment %}   -->
@@ -186,6 +188,8 @@
                 <p>{{ item.billet.title }}</p>
                 {% if item.billet.image %}
                   <p><img src="{{ item.billet.image.url }}" alt="Image de {{ item.billet.title }}"></p>
+                {% else %}
+                  <p><span>Pas d'image</span></p>
                 {% endif %}
               </div>
             </article>
