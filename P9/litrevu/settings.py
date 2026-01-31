@@ -127,3 +127,9 @@ AUTH_USER_MODEL = "users.CustomUser"
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/users/login/"
+
+# Filepath for media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
+
+# Media files URL
+MEDIA_URL = '/images/'
