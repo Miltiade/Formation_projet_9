@@ -60,8 +60,12 @@
   .image-gauche img, .critique-billet img {
     max-width: 100%;
     height: auto;
-    border: 1px solid black;
     margin-top: 0.5rem;
+  }
+
+  .flux-image {
+    width: 160px;   /* makes the image small */
+    height: auto;
   }
 
   /* Bloc critique-billet : encadré noir et marges */
@@ -119,7 +123,7 @@
 
               {% if item.image %}
                 <p class="image-gauche">
-                  <img src="{{ item.image.url }}" alt="Image de {{ item.title }}">
+                  <img src="{{ item.image.url }}" alt="Image de {{ item.title }}" class="flux-image">
                 </p>
               {% else %}
                 <p class="image-gauche"><span>Pas d'image</span></p>
@@ -161,7 +165,7 @@
                 <p>Ticket - {{ item.billet.user.username }}</p>
                 <p>{{ item.billet.title }}</p>
                 {% if item.billet.image %}
-                  <p><img src="{{ item.billet.image.url }}" alt="Image de {{ item.billet.title }}"></p>
+                  <p><img src="{{ item.billet.image.url }}" alt="Image de {{ item.billet.title }}" class="flux-image"></p>
                 {% else %}
                   <p><span>Pas d'image</span></p>
                   {% endif %}
