@@ -209,7 +209,7 @@ def posts_perso_view(request):
     )
 
     # Fusionner et trier tous les posts par date décroissante
-    # Important : billets et commentaires doivent avoir un attribut is_billet identifié
+    # NB : billets et commentaires doivent avoir un attribut is_billet identifié
     flux = list(billets) + list(commentaires)
     flux_tries = sorted(flux, key=lambda x: x.time_created, reverse=True)
 
