@@ -57,6 +57,7 @@ class BilletDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class BilletCritiqueCreateView(LoginRequiredMixin, View):
+    """View for creating a Billet along with an associated Commentaire."""
     template_name = "billets/billet_critique_form.html"
 
     def get(self, request):
@@ -72,6 +73,7 @@ class BilletCritiqueCreateView(LoginRequiredMixin, View):
         )
 
     def post(self, request):
+        """Handles the submission of both Billet and Commentaire forms."""
         billet_form = BilletForm(request.POST, request.FILES)
         commentaire_form = CommentaireForm(request.POST)
 
@@ -99,6 +101,7 @@ class BilletCritiqueCreateView(LoginRequiredMixin, View):
 
 @login_required
 def flux(request):
+    """Function-based view to display all Billets ordered by creation time."""
     billets = Billet.objects.all().order_by(
         "-time_created"
     )  # trie les billets par date de création décroissante
@@ -200,6 +203,7 @@ def flux_view(request):
 
 @login_required
 def posts_perso_view(request):
+    """View to display all Billets and Commentaires by the logged-in user."""
     # Récupérer les billets de l’utilisateur courant, triés par date décroissante
     billets = Billet.objects.filter(user=request.user).order_by("-time_created")
 

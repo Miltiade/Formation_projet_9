@@ -1,3 +1,5 @@
+"""URLs for the billets app."""
+
 from django.urls import path
 from . import views
 

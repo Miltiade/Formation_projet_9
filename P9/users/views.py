@@ -1,5 +1,5 @@
 """
-Vues pour les modèles CustomUser et UserFollows.
+Views for the users app.
 """
 
 from django.shortcuts import render, redirect
