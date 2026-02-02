@@ -1,4 +1,9 @@
 <a href="{% url 'billets:flux' %}">Flux</a>
 <a href="{% url 'billets:posts_perso' %}">Posts</a>
 <a href="{% url 'users:userfollows_liste' %}">Abonnements</a>
-<a href="{% url 'users:logout' %}">Se déconnecter</a>
+<form action="{% url 'users:logout' %}" method="post" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" style="all: unset; cursor: pointer; text-decoration: none; color: black;">
+    Se déconnecter
+  </button>
+</form>
