@@ -74,3 +74,12 @@ L’application suit les recommandations d’accessibilité WCAG.
 ## Ressources
 
 - Documentation Django : https://docs.djangoproject.com/
+
+## Configuration des variables d’environnement
+
+Aucune variable d’environnement n’est requise pour lancer l’application en local.  
+Si vous en ajoutez, pensez à ne pas les committer dans le dépôt.
+
+## Licence
+
+Ce projet est sous licence MIT.
