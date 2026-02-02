@@ -6,9 +6,7 @@ app_name = "billets"
 urlpatterns = [
     path("", views.flux_view, name="flux"),
     path("ajouter/", views.BilletCreateView.as_view(), name="ajouter"),
-    path(
-        "modifier/<int:pk>/", views.BilletUpdateView.as_view(), name="modifier"
-    ),
+    path("modifier/<int:pk>/", views.BilletUpdateView.as_view(), name="modifier"),
     path(
         "supprimer/<int:pk>/",
         views.BilletDeleteView.as_view(),
@@ -30,13 +28,13 @@ urlpatterns = [
         name="commentaire_supprimer",
     ),
     path(
-        "posts/", 
-        views.posts_perso_view, 
+        "posts/",
+        views.posts_perso_view,
         name="posts_perso",
-        ),
+    ),
     path(
-        'ajouter-complet/', 
-        views.BilletCritiqueCreateView.as_view(), 
-        name='ajouter_complet',
-        ),
+        "ajouter-complet/",
+        views.BilletCritiqueCreateView.as_view(),
+        name="ajouter_complet",
+    ),
 ]

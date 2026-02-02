@@ -129,6 +129,6 @@ LOGIN_REDIRECT_URL = "/billets/"
 LOGIN_URL = "/users/login/"
 
 # Filepath for media files
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / "media"
 # Media files URL
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"

@@ -9,11 +9,13 @@ from django.conf import settings
 
 class CustomUser(AbstractUser):
     """Custom user model extending AbstractUser."""
+
     pass
 
 
 class UserFollows(models.Model):
     """Model representing a user following another user."""
+
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         related_name="following",
@@ -27,6 +29,7 @@ class UserFollows(models.Model):
 
     class Meta:
         """Constraints for UserFollows model."""
+
         unique_together = ("user", "followed_user")
 
     def __str__(self):

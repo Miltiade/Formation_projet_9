@@ -16,12 +16,11 @@ from django.contrib.auth.decorators import login_required
 
 class BilletCreateView(LoginRequiredMixin, CreateView):
     """View for creating a new Billet."""
+
     model = Billet
     form_class = BilletForm
     template_name = "billets/billet_form.html"  # créez ce template
-    success_url = reverse_lazy(
-        "billets:flux"
-    )  # ajustez la redirection après ajout
+    success_url = reverse_lazy("billets:flux")  # ajustez la redirection après ajout
 
     def form_valid(self, form):
         form.instance.user = (
@@ -32,6 +31,7 @@ class BilletCreateView(LoginRequiredMixin, CreateView):
 
 class BilletUpdateView(LoginRequiredMixin, UpdateView):
     """View for updating an existing Billet."""
+
     model = Billet
     form_class = BilletForm
     template_name = "billets/billet_update.html"
@@ -45,6 +45,7 @@ class BilletUpdateView(LoginRequiredMixin, UpdateView):
 
 class BilletDeleteView(LoginRequiredMixin, DeleteView):
     """View for deleting a Billet."""
+
     model = Billet
     template_name = "billets/billet_confirm_delete.html"  # créez ce template
     success_url = reverse_lazy("billets:flux")
@@ -54,16 +55,21 @@ class BilletDeleteView(LoginRequiredMixin, DeleteView):
             user=self.request.user
         )  # permet uniquement à l’auteur de supprimer
 
+
 class BilletCritiqueCreateView(LoginRequiredMixin, View):
     template_name = "billets/billet_critique_form.html"
 
     def get(self, request):
         billet_form = BilletForm()
         commentaire_form = CommentaireForm()
-        return render(request, self.template_name, {
-            "billet_form": billet_form,
-            "commentaire_form": commentaire_form,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "billet_form": billet_form,
+                "commentaire_form": commentaire_form,
+            },
+        )
 
     def post(self, request):
         billet_form = BilletForm(request.POST, request.FILES)
@@ -81,10 +87,15 @@ class BilletCritiqueCreateView(LoginRequiredMixin, View):
 
             return redirect("billets:flux")
 
-        return render(request, self.template_name, {
-            "billet_form": billet_form,
-            "commentaire_form": commentaire_form,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "billet_form": billet_form,
+                "commentaire_form": commentaire_form,
+            },
+        )
+
 
 @login_required
 def flux(request):
@@ -96,6 +107,7 @@ def flux(request):
 
 class CommentaireCreateView(LoginRequiredMixin, CreateView):
     """View for creating a new Commentaire associated with a Billet."""
+
     model = Commentaire
     form_class = CommentaireForm
     template_name = "billets/commentaire_form.html"
@@ -106,12 +118,10 @@ class CommentaireCreateView(LoginRequiredMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        form.instance.user = (
-            self.request.user
-        )  # associe l’utilisateur connecté
+        form.instance.user = self.request.user  # associe l’utilisateur connecté
         form.instance.billet = self.billet  # associe le billet
         return super().form_valid(form)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["billet"] = self.billet  # ajoute l’objet billet au contexte
@@ -125,6 +135,7 @@ class CommentaireCreateView(LoginRequiredMixin, CreateView):
 
 class CommentaireUpdateView(LoginRequiredMixin, UpdateView):
     """View for updating an existing Commentaire."""
+
     model = Commentaire
     form_class = CommentaireForm
     template_name = "billets/commentaire_update.html"
@@ -135,7 +146,7 @@ class CommentaireUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['billet'] = self.object.billet
+        context["billet"] = self.object.billet
         return context
 
     def get_success_url(self):
@@ -144,6 +155,7 @@ class CommentaireUpdateView(LoginRequiredMixin, UpdateView):
 
 class CommentaireDeleteView(LoginRequiredMixin, DeleteView):
     """View for deleting a Commentaire."""
+
     model = Commentaire
     template_name = "billets/commentaire_confirm_delete.html"  # à créer
     success_url = reverse_lazy("billets:flux")
@@ -171,9 +183,8 @@ def flux_view(request):
 
     # Etape 3 bis : récupérer IDs billets commentés par l’utilisateur courant
     billets_commentes_par_utilisateur = Commentaire.objects.filter(
-        user=request.user,
-        billet__in=billets
-    ).values_list('billet_id', flat=True)
+        user=request.user, billet__in=billets
+    ).values_list("billet_id", flat=True)
 
     # Étape 4 : Annoter chaque billet avec un attribut pour savoir si l'utilisateur a commenté
     for billet in billets:
@@ -186,13 +197,16 @@ def flux_view(request):
     # Étape 6 : passer la liste au template pour affichage
     return render(request, "billets/flux.html", {"flux": flux_tries})
 
+
 @login_required
 def posts_perso_view(request):
     # Récupérer les billets de l’utilisateur courant, triés par date décroissante
     billets = Billet.objects.filter(user=request.user).order_by("-time_created")
 
     # Récupérer les commentaires de l’utilisateur courant, triés par date décroissante
-    commentaires = Commentaire.objects.filter(user=request.user).order_by("-time_created")
+    commentaires = Commentaire.objects.filter(user=request.user).order_by(
+        "-time_created"
+    )
 
     # Fusionner et trier tous les posts par date décroissante
     # Important : billets et commentaires doivent avoir un attribut is_billet identifié

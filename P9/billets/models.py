@@ -2,7 +2,6 @@
 Models for Billet and Commentaire.
 """
 
-
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -10,6 +9,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Billet(models.Model):
     """Model representing a post (Billet)."""
+
     # Titre du billet, champ texte limité à 128 caractères
     title = models.CharField(max_length=128)
 
@@ -18,9 +18,7 @@ class Billet(models.Model):
 
     # Auteur du billet, liaison vers le modèle utilisateur Django
     # on_delete=models.CASCADE : utilisateur supprimé = ses billets aussi
-    user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     # Image associée au billet, optionnelle (blank=True, null=True)
     # upload_to définit le dossier où l’image sera stockée
@@ -40,6 +38,7 @@ class Billet(models.Model):
 
 class Commentaire(models.Model):
     """Model representing a comment (Commentaire) on a Billet."""
+
     # Billet auquel ce commentaire est associé
     billet = models.ForeignKey(
         to="Billet", on_delete=models.CASCADE, related_name="commentaires"
@@ -51,9 +50,7 @@ class Commentaire(models.Model):
     )
 
     # Utilisateur auteur du commentaire
-    user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     # Titre du commentaire
     headline = models.CharField(max_length=128)

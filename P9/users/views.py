@@ -18,6 +18,7 @@ from django.views.generic import DeleteView
 
 class SignUpView(generic.CreateView):
     """View for user signup."""
+
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("users:login")
     template_name = "users/signup.html"
@@ -29,6 +30,7 @@ def home(request):
 
 class UserFollowsListView(LoginRequiredMixin, ListView):
     """View to list users followed by the current user."""
+
     model = UserFollows
     template_name = "users/userfollows_list.html"
     context_object_name = "follows"
@@ -40,10 +42,13 @@ class UserFollowsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         """Adds the list of followers to the context."""
-        context['followers'] = UserFollows.objects.filter(followed_user=self.request.user)
+        context["followers"] = UserFollows.objects.filter(
+            followed_user=self.request.user
+        )
         """Adds the follow form to the context."""
-        context['form'] = UserFollowsForm()
+        context["form"] = UserFollowsForm()
         return context
+
 
 User = get_user_model()
 """View to add a new user to follow."""
@@ -59,9 +64,7 @@ def userfollows_ajouter(request):
             try:
                 user_to_follow = User.objects.get(username=username_to_follow)
                 if user_to_follow == request.user:
-                    messages.error(
-                        request, "Vous ne pouvez pas vous suivre vous-même."
-                    )
+                    messages.error(request, "Vous ne pouvez pas vous suivre vous-même.")
                 else:
                     # Vérifier que le suivi n’existe pas déjà
                     existence = UserFollows.objects.filter(
@@ -92,6 +95,7 @@ def userfollows_ajouter(request):
 
 class UserFollowsDeleteView(LoginRequiredMixin, DeleteView):
     """View to unfollow a user."""
+
     model = UserFollows
     template_name = "users/userfollows_confirm_delete.html"
     success_url = reverse_lazy("users:userfollows_liste")
