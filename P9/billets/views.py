@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView
 from .models import Billet, Commentaire
 from users.models import UserFollows
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect
 from .forms import BilletForm, CommentaireForm
 from django.contrib.auth.decorators import login_required
 
